@@ -323,8 +323,8 @@ class MyParser {
       if (latitude == "") {latitude = SQL_NULL;}
       if (longitude == "") {longitude = SQL_NULL;}
       
-      item_file.format("%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s\n",
-            item_id, DELIM, seller_id, DELIM, name, DELIM, buy_price, DELIM, currently, 
+      item_file.format("%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s\n",
+            item_id, DELIM, seller_id, DELIM, name, DELIM, buy_price, DELIM, currently, DELIM, 
             first_bid, DELIM, number_of_bids, DELIM, started, DELIM, ends, DELIM, location, 
             DELIM, country, DELIM, latitude, DELIM, longitude, DELIM, description);
    }

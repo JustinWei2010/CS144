@@ -16,19 +16,20 @@ CREATE TABLE item
     number_of_bids int,
     started TIMESTAMP,
     ends TIMESTAMP,
-    description VARCHAR(4000),
     location VARCHAR(100),
     country VARCHAR(100),
     latitude VARCHAR(100),
     longitude VARCHAR(100),
+    description VARCHAR(4000),
     FOREIGN KEY (seller_id) REFERENCES user(user_id)
 );
 
 CREATE TABLE item_category
 (
-    item_id INT UNSIGNED PRIMARY KEY,
+    item_id INT UNSIGNED,
     category VARCHAR(100),
-    FOREIGN KEY (item_id) REFERENCES item(item_id)
+    FOREIGN KEY (item_id) REFERENCES item(item_id),
+    PRIMARY KEY(item_id, category)
 );
 
 CREATE TABLE item_bid
