@@ -13,10 +13,29 @@ mysql CS144 < create.sql
 echo "Converting xml files to sql load files"
 ant run-all
 
-# Run the load.sql batch file to load the data
-mysql CS144 < load.sql
+# Remove duplicates
 echo ""
-echo "Loading data into sql tables"
+echo "Removing duplicates from load files..."
+uniq seller.csv > temp.csv
+cat temp.csv > seller.csv
+uniq bidder.csv > temp.csv
+cat temp.csv > bidder.csv
+uniq item_category.csv > temp.csv
+cat temp.csv > item_category.csv
+uniq user.csv > temp.csv
+cat temp.csv > user.csv
+uniq item_bid.csv > temp.csv
+cat temp.csv > item_bid.csv
+uniq item.csv > temp.csv
+cat temp.csv > item.csv
+rm temp.csv
+echo "Finished removing duplicates!"
+
+# Run the load.sql batch file to load the data
+echo ""
+echo "Loading data into sql tables..."
+mysql CS144 < load.sql
+echo "Finished loading data!"
 echo ""
 
 # Run the sql test queries

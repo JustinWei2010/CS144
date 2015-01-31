@@ -65,7 +65,6 @@
             <arg line="${ebaydata}" />
             <classpath refid="classpath"/>
         </java>
-        <antcall target="remove_duplicates" />
     </target>
 
 </project>
