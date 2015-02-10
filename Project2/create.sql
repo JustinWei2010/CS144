@@ -7,7 +7,7 @@ CREATE TABLE user
 
 CREATE TABLE item
 (
-    item_id INT UNSIGNED PRIMARY KEY,
+    item_id CHAR(100) PRIMARY KEY,
     seller_id CHAR(100),
     name VARCHAR(1000),
     buy_price DECIMAL(8,2),
@@ -26,7 +26,7 @@ CREATE TABLE item
 
 CREATE TABLE item_category
 (
-    item_id INT UNSIGNED,
+    item_id CHAR(100),
     category VARCHAR(100),
     FOREIGN KEY (item_id) REFERENCES item(item_id),
     PRIMARY KEY(item_id, category)
@@ -34,7 +34,7 @@ CREATE TABLE item_category
 
 CREATE TABLE item_bid
 (
-    item_id INT UNSIGNED,
+    item_id CHAR(100),
     bidder_id CHAR(100),
     time TIMESTAMP,
     amount DECIMAL(8,2),
