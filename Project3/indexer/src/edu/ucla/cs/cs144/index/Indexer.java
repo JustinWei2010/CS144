@@ -113,7 +113,7 @@ public class Indexer {
    /*
     * Helper function which returns a string of category names pertaining to an item delimited by spaces.
     */
-   private String getItemCategories(final Document doc, final PreparedStatement ps, String item_id) 
+   private String getItemCategories(final Document doc, final PreparedStatement ps, final String item_id) 
          throws SQLException {
       String categories = "";
       ps.setString(1, item_id);
@@ -137,10 +137,15 @@ public class Indexer {
       //Add fields to document
       doc.add(new StringField("item_id", item_id, Field.Store.YES));
       doc.add(new StringField("name", name, Field.Store.YES));
-      String fullSearchableText = name + " " + getItemCategories(doc, ps, item_id) + description;
+      final String fullSearchableText = name + " " + getItemCategories(doc, ps, item_id) + description;
       doc.add(new TextField("content", fullSearchableText, Field.Store.NO));
 
       //Write document to index
       indexWriter.addDocument(doc);
    }
+
+   public static void main(String args[]) {
+      Indexer idx = new Indexer();
+      idx.rebuildIndexes();
+   }   
 }

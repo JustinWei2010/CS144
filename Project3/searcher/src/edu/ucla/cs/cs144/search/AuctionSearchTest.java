@@ -1,13 +1,9 @@
 package edu.ucla.cs.cs144.search;
 
-import edu.ucla.cs.cs144.index.Indexer;
-
 public class AuctionSearchTest {
    public static void main(String[] args1)
    {
       AuctionSearch as = new AuctionSearch();
-      Indexer idx = new Indexer();
-      idx.rebuildIndexes();
 
       String message = "Test message";
       String reply = as.echo(message);
@@ -15,7 +11,7 @@ public class AuctionSearchTest {
 
       String query = "superman";
       SearchResult[] basicResults = as.basicSearch(query, 0, 20);
-      System.out.println("Basic Seacrh Query: " + query);
+      System.out.println("Basic Search Query: " + query);
       System.out.println("Received " + basicResults.length + " results");
       for(SearchResult result : basicResults) {
          System.out.println(result.getItemId() + ": " + result.getName());
@@ -36,7 +32,7 @@ public class AuctionSearchTest {
       System.out.println(item);
 
       // Add your own test here
-
+      
       //close connection
       as.closeDBConnection();
    }
