@@ -25,13 +25,13 @@ public class SearchEngine {
       parser = new QueryParser("content", new StandardAnalyzer());
    }
 
-   public TopDocs performSearch(String queryString, int n)
+   public TopDocs performSearch(final String queryString)
          throws IOException, ParseException {
       Query query = parser.parse(queryString);
-      return searcher.search(query, n);
+      return searcher.search(query, Integer.MAX_VALUE);
    }
 
-   public Document getDocument(int docId)
+   public Document getDocument(final int docId)
          throws IOException {
       return searcher.doc(docId);
    }

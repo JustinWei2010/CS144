@@ -1,31 +1,33 @@
 package edu.ucla.cs.cs144.search;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.File;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
-import java.util.List;
-import java.text.SimpleDateFormat;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.apache.lucene.document.Document;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.ScoreDoc;
 
+import edu.ucla.cs.cs144.DbManager;
+import edu.ucla.cs.cs144.XMLConverter;
+
 public class AuctionSearch implements IAuctionSearch {
 
+   private Connection conn;
+
+   public AuctionSearch () {
+      try {
+         this.conn = DbManager.getConnection(true);
+      } catch (SQLException ex) {
+         ex.printStackTrace();
+      }
+   }
+   
    /* 
     * You will probably have to use JDBC to access MySQL data
     * Lucene IndexSearcher class to lookup Lucene index.
@@ -43,47 +45,113 @@ public class AuctionSearch implements IAuctionSearch {
 
    public SearchResult[] basicSearch(final String query, final int numResultsToSkip, 
          final int numResultsToReturn) {
-      final SearchResult[] results = new SearchResult[numResultsToReturn];
-      final int total = numResultsToReturn;
-      int start = 0;
-      if (numResultsToSkip > 0) {
-         start = numResultsToSkip-1;
-      }
+      final LinkedList<SearchResult> results = new LinkedList<SearchResult>();
       try {
          final SearchEngine se = new SearchEngine();
-         final TopDocs topDocs = se.performSearch(query, total);
+         final TopDocs topDocs = se.performSearch(query);
          final ScoreDoc[] hits = topDocs.scoreDocs;
-         
-         //Check that the total requested is less than total returned
-         if (hits.length < total) {
-            System.err.println("Number of requested results is greater than total results returned!");
+         final int total = numResultsToReturn+numResultsToSkip;
+
+         //Check if requested skip amount is greater than number of hits
+         if (hits.length < numResultsToSkip) {
+            System.err.println("Number of requested to skip is greater than total results returned!");
             System.exit(2);
          }
-         
+
          //Add each search result to the array
-         for (int i = start; i < total; i++) {
+         for (int i=numResultsToSkip; i < total; i++) {
             Document doc = se.getDocument(hits[i].doc);
-            results[i] = new SearchResult(doc.get("item_id"), doc.get("name"));
+            results.add(new SearchResult(doc.get("item_id"), doc.get("name")));
          }
+         return results.toArray(new SearchResult[results.size()]);
       } catch (IOException | ParseException ex) {
          ex.printStackTrace();
+         System.exit(2);
+         return null;
       }
-      return results;
    }
 
-   public SearchResult[] spatialSearch(String query, SearchRegion region,
-         int numResultsToSkip, int numResultsToReturn) {
-      // TODO: Your code here!
-      return new SearchResult[0];
+   /*
+    * Helper function to setup database connection and retrieve spatial query records
+    */
+   private ResultSet getSpatialQueryResults(final SearchRegion region) throws SQLException {
+      final Statement stmt = this.conn.createStatement();
+      final double lx = region.getLx(), ly = region.getLy(), rx = region.getRx(), ry = region.getRy();
+
+      //Careful about the precision of the float from string formatter
+      final String spatial_query = String.format("SELECT * FROM item_location WHERE "
+            + "MBRContains(GeomFromText('Polygon((%f %f, %f %f, %f %f, %f %f, %f %f))'), coord)", 
+            lx, ly, lx, ry, rx, ry, rx, ly, lx, ly);
+      return stmt.executeQuery(spatial_query);
    }
 
-   public String getXMLDataForItemId(String itemId) {
-      // TODO: Your code here!
-      return "";
+   public SearchResult[] spatialSearch(final String query, final SearchRegion region,
+         final int numResultsToSkip, final int numResultsToReturn) {
+      //Get spatial index search results and add them to hashset
+      final HashSet <String> basic_results = new HashSet <String>();
+      try {
+         ResultSet rs = getSpatialQueryResults(region);
+         while (rs.next()) {
+            basic_results.add(rs.getString("item_id"));
+         }
+      } catch (SQLException ex) {
+         ex.printStackTrace();
+         System.exit(2);
+      }
+
+      //Check keyword search results
+      final LinkedList<SearchResult> results = new LinkedList<SearchResult>();
+      try {
+         final SearchEngine se = new SearchEngine();
+         final TopDocs topDocs = se.performSearch(query);
+         final ScoreDoc[] hits = topDocs.scoreDocs;
+
+         //Check if requested skip amount is greater than number of hits
+         if (hits.length < numResultsToSkip) {
+            System.err.println("Number of requested to skip is greater than total results returned!");
+            System.exit(2);
+         }
+
+         //Add each search result to the array
+         int skip_count = 0;
+         int total_results = 0;
+         for (int i=0; i < hits.length; i++) {
+            Document doc = se.getDocument(hits[i].doc);
+            //Only take intersection of the two results
+            if (basic_results.contains(doc.get("item_id"))) {
+               if (skip_count < numResultsToSkip) {
+                  skip_count++;
+               } else if (total_results < numResultsToReturn){
+                  results.add(new SearchResult(doc.get("item_id"), doc.get("name")));
+                  total_results++;
+               } else {
+                  break;
+               }
+            }
+         }
+         return results.toArray(new SearchResult[results.size()]);
+      } catch (IOException | ParseException ex) {
+         ex.printStackTrace();
+         System.exit(2);
+         return null;
+      }
    }
 
-   public String echo(String message) {
+   public String getXMLDataForItemId(final String item_id) {
+      XMLConverter converter = new XMLConverter(this.conn, item_id);
+      return converter.getXML();
+   }
+
+   public String echo(final String message) {
       return message;
    }
 
+   public void closeDBConnection() {
+      try {
+         this.conn.close();
+      } catch (SQLException ex) {
+         ex.printStackTrace();
+      }
+   }
+   
 }

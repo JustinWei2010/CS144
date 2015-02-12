@@ -5,10 +5,9 @@ import edu.ucla.cs.cs144.index.Indexer;
 public class AuctionSearchTest {
    public static void main(String[] args1)
    {
+      AuctionSearch as = new AuctionSearch();
       Indexer idx = new Indexer();
       idx.rebuildIndexes();
-      
-      AuctionSearch as = new AuctionSearch();
 
       String message = "Test message";
       String reply = as.echo(message);
