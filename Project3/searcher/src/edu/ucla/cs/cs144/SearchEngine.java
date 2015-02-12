@@ -1,4 +1,4 @@
-package edu.ucla.cs.cs144.search;
+package edu.ucla.cs.cs144;
 
 import java.io.IOException;
 import java.io.File;

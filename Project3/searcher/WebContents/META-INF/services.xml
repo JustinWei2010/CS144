@@ -8,7 +8,7 @@
                          class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
     </messageReceivers>
     <operation name="echo" mep="http://www.w3.org/2004/08/wsdl/in-out" />
-    <operation name="basicSearch" mep="http://www.w3.org/2004/08/wsdl/in-out" />
+    <operation name="basicSearch" mep="http://www.w3.org/2004/08/wsdl/in-out" ></operation>
     <operation name="advancedSearch" mep="http://www.w3.org/2004/08/wsdl/in-out" />
     <operation name="getXMLDataForItemId" mep="http://www.w3.org/2004/08/wsdl/in-out" />
 </service>
