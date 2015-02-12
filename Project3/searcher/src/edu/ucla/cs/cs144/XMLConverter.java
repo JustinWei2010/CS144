@@ -23,12 +23,13 @@ public class XMLConverter {
    private String converted_xml;
    private String item_id;
 
-   public XMLConverter(final Connection conn, final String item_id) {
-      this.conn = conn;
+   public XMLConverter(final String item_id) {
       this.item_id = item_id;
       this.converted_xml = "";
       try {
+         this.conn = DbManager.getConnection(true);
          this.buildXML();
+         this.conn.close();
       } catch (SQLException ex) {
          ex.printStackTrace();
       }

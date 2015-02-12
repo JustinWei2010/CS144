@@ -32,8 +32,5 @@ public class AuctionSearchTest {
       System.out.println(item);
 
       // Add your own test here
-      
-      //close connection
-      as.closeDBConnection();
    }
 }

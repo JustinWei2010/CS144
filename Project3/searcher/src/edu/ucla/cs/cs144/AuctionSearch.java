@@ -17,17 +17,6 @@ import edu.ucla.cs.cs144.DbManager;
 import edu.ucla.cs.cs144.XMLConverter;
 
 public class AuctionSearch implements IAuctionSearch {
-
-   private Connection conn;
-
-   public AuctionSearch () {
-      try {
-         this.conn = DbManager.getConnection(true);
-      } catch (SQLException ex) {
-         ex.printStackTrace();
-      }
-   }
-   
    /* 
     * You will probably have to use JDBC to access MySQL data
     * Lucene IndexSearcher class to lookup Lucene index.
@@ -74,8 +63,8 @@ public class AuctionSearch implements IAuctionSearch {
    /*
     * Helper function to setup database connection and retrieve spatial query records
     */
-   private ResultSet getSpatialQueryResults(final SearchRegion region) throws SQLException {
-      final Statement stmt = this.conn.createStatement();
+   private ResultSet getSpatialQueryResults(final Connection conn, final SearchRegion region) throws SQLException {
+      final Statement stmt = conn.createStatement();
       final double lx = region.getLx(), ly = region.getLy(), rx = region.getRx(), ry = region.getRy();
 
       //Careful about the precision of the float from string formatter
@@ -90,10 +79,12 @@ public class AuctionSearch implements IAuctionSearch {
       //Get spatial index search results and add them to hashset
       final HashSet <String> basic_results = new HashSet <String>();
       try {
-         ResultSet rs = getSpatialQueryResults(region);
+         final Connection conn = DbManager.getConnection(true);
+         ResultSet rs = getSpatialQueryResults(conn, region);
          while (rs.next()) {
             basic_results.add(rs.getString("item_id"));
          }
+         conn.close();
       } catch (SQLException ex) {
          ex.printStackTrace();
          System.exit(2);
@@ -138,20 +129,11 @@ public class AuctionSearch implements IAuctionSearch {
    }
 
    public String getXMLDataForItemId(final String item_id) {
-      XMLConverter converter = new XMLConverter(this.conn, item_id);
+      XMLConverter converter = new XMLConverter(item_id);
       return converter.getXML();
    }
 
    public String echo(final String message) {
       return message;
    }
-
-   public void closeDBConnection() {
-      try {
-         this.conn.close();
-      } catch (SQLException ex) {
-         ex.printStackTrace();
-      }
-   }
-   
 }
