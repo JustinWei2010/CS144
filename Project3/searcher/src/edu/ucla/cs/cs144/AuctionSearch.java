@@ -39,8 +39,13 @@ public class AuctionSearch implements IAuctionSearch {
          final SearchEngine se = new SearchEngine();
          final TopDocs topDocs = se.performSearch(query);
          final ScoreDoc[] hits = topDocs.scoreDocs;
-         final int total = numResultsToReturn+numResultsToSkip;
-
+         int total = numResultsToReturn+numResultsToSkip;
+         
+         //Return everything if requested results is 0 or total results if its smaller than calculated
+         if (numResultsToReturn == 0 || hits.length < total) {
+            total = hits.length;
+         }
+         
          //Check if requested skip amount is greater than number of hits
          if (hits.length < numResultsToSkip) {
             System.err.println("Number of requested to skip is greater than total results returned!");
@@ -112,7 +117,8 @@ public class AuctionSearch implements IAuctionSearch {
             if (basic_results.contains(doc.get("item_id"))) {
                if (skip_count < numResultsToSkip) {
                   skip_count++;
-               } else if (total_results < numResultsToReturn){
+               //Return everything if requested results is 0 else just grab the specified amount
+               } else if (numResultsToReturn == 0 || total_results < numResultsToReturn){
                   results.add(new SearchResult(doc.get("item_id"), doc.get("name")));
                   total_results++;
                } else {

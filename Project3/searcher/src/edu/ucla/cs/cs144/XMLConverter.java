@@ -77,6 +77,10 @@ public class XMLConverter {
     * Helper function that transforms XML escape characters in a text to their counterparts
     */
    private String escapeTextChars(final String text) {
+      if (text == null) {
+         return null;
+      }
+      
       String result = "";
       for (int i = 0; i < text.length(); i++) {
          char c = text.charAt(i);
@@ -197,5 +201,4 @@ public class XMLConverter {
    public String getXML() {
       return this.converted_xml;
    }
-
 }
