@@ -20,8 +20,8 @@
         <form action="search" method="GET" id="searchForm">
             Search:
             <input type="text" name="q">
-            <input type="hidden" name="numResultsToSkip" value="0">
-            <input type="hidden" name="numResultsToReturn" value="30">
+            <input type="hidden" name="numResultsToSkip" value="${DEFAULT_SKIP}">
+            <input type="hidden" name="numResultsToReturn" value="${DEFAULT_RETURN}">
             <input type="submit" value="Submit">
         </form>
 
@@ -29,7 +29,7 @@
         <c:choose>
             <c:when test="${not empty search_result}">
                 <table>
-                    <c:forEach var="result" items="${search_result}">
+                    <c:forEach var="result" items="${search_result}" begin="0" end="${numResultsToReturn-1}">
                         <c:url value="item" var="itemURL">
                             <c:param name="id" value="${result.itemId}" />
                         </c:url>

@@ -18,20 +18,28 @@ public class SearchServlet extends HttpServlet implements Servlet {
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
    {
       final String query = request.getParameter("q");
-      final String numResultsToSkip = request.getParameter("numResultsToSkip");
-      final String numResultsToReturn = request.getParameter("numResultsToReturn");
-      int skip_count = DEFAULT_SKIP;
-      int result_count = DEFAULT_RETURN;
-      if (numResultsToSkip != null) {skip_count = Integer.parseInt(numResultsToSkip);}
-      if (numResultsToReturn != null) {result_count = Integer.parseInt(numResultsToReturn);}
-      final SearchResult[] search_result = AuctionSearchClient.basicSearch(query, skip_count, result_count);
+      int numResultsToSkip = DEFAULT_SKIP;
+      int numResultsToReturn = DEFAULT_RETURN;
+      SearchResult[] search_result = null;
+      try {
+         numResultsToSkip = Integer.parseInt(request.getParameter("numResultsToSkip"));
+         numResultsToReturn = Integer.parseInt(request.getParameter("numResultsToReturn"));
+         if (query != null && query != "") {
+            //Grab extra result for checking whether or not to display next button
+            search_result = AuctionSearchClient.basicSearch(query, numResultsToSkip, numResultsToReturn+1);
+         }
+      } catch (final Exception ex) {
+         ex.printStackTrace();
+      }
 
       request.setAttribute("search_result", search_result);
       request.setAttribute("query", query);
-      request.setAttribute("numResultsToSkip", skip_count);
-      request.setAttribute("numResultsToReturn", result_count);
-      request.setAttribute("show_prev", skip_count-result_count >= 0 && result_count != 0);
-      request.setAttribute("show_next", search_result.length == result_count);
+      request.setAttribute("numResultsToSkip", numResultsToSkip);
+      request.setAttribute("numResultsToReturn", numResultsToReturn);
+      request.setAttribute("show_prev", search_result != null && numResultsToSkip-numResultsToReturn >= 0 && numResultsToReturn != 0);
+      request.setAttribute("show_next", search_result != null && search_result.length == numResultsToReturn+1 && numResultsToReturn != 0);
+      request.setAttribute("DEFAULT_SKIP", DEFAULT_SKIP);
+      request.setAttribute("DEFAULT_RETURN", DEFAULT_RETURN);
       request.getRequestDispatcher("/search.jsp").forward(request, response);
    }
 }

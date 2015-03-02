@@ -1,7 +1,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
     <head>
-        <title>${item.id}</title>
+        <script type="text/javascript" 
+            src="http://maps.google.com/maps/api/js?key=${API_KEY}">
+        </script> 
+        <!-- Define variables to be passed to googleMaps.js -->
+        <script type="text/javascript">
+            var latitude = ${item.location.latitude};
+            var longitude = ${item.location.longitude};
+            var address = '${item.address}';
+        </script>
+        <script type="text/javascript" src="googleMaps.js"></script>
+        <title>Item: ${item.id}</title>
     </head>
     <body>
         <form action="item" method="GET" id="searchForm">
@@ -38,21 +48,14 @@
                 </c:forEach>
             </table>
         </c:if>
-        
+
         <h3>started: ${item.started}</h3>
         <h3>ends: ${item.ends}</h3>
-        
-        <h3>location: ${item.location.name}</h3>
-        <c:if test="${not empty item.location.latitude}">
-            <h4>latitude: ${item.location.latitude}</h4>
-        </c:if>
-        <c:if test="${not empty item.location.longitude}">
-            <h4>longitude: ${item.location.longitude}</h4>
-        </c:if>
-        <h3>country: ${item.country}</h3>
-        
+
         <h3>seller: ${item.seller.name}</h3>
         <h4>rating: ${item.seller.rating}</h4>
         <h3>description: ${item.description}</h3>
+
+        <div id="map_canvas" style="width: 500px; height: 550px;"></div>
     </body>
 </html>
