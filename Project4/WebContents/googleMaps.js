@@ -5,7 +5,7 @@ function getMap(coord) {
         center: latlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
-    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
     var marker = new google.maps.Marker({
         map: map,
         position: latlng
@@ -20,7 +20,7 @@ function showWorldMap() {
         center: new google.maps.LatLng(0, 78),
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
-    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
 }
 
 function getGeocode(address) {

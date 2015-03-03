@@ -14,42 +14,52 @@
 
 <html>
     <head>
+        <jsp:include page="header.html"/>
         <title>Search Results</title>
     </head>
     <body>
-        <form action="search" method="GET" id="searchForm">
-            Search:
-            <input type="text" name="q">
-            <input type="hidden" name="numResultsToSkip" value="${DEFAULT_SKIP}">
-            <input type="hidden" name="numResultsToReturn" value="${DEFAULT_RETURN}">
-            <input type="submit" value="Submit">
-        </form>
-
-        <h1>Search Results</h1>
-        <c:choose>
-            <c:when test="${not empty search_result}">
-                <table>
-                    <c:forEach var="result" items="${search_result}" begin="0" end="${numResultsToReturn-1}">
-                        <c:url value="item" var="itemURL">
-                            <c:param name="id" value="${result.itemId}" />
-                        </c:url>
-                        <tr>
-                            <td><a href="${itemURL}">${result.itemId}</a></td>
-                            <td>${result.name}</td>
-                        </tr>
-                    </c:forEach>
-                </table>
-                <c:if test="${show_prev}">
-                    <a href="${prevURL}">Prev</a>
-                </c:if>
-                <c:if test="${show_next}">
-                    <a href="${nextURL}">Next</a>
-                </c:if>
-            </c:when>
-            <c:otherwise>
-                <h3>No Results Found...</h3>
-            </c:otherwise>
-        </c:choose>
-
+        <div class="content-wrapper col-xs-8 col-xs-offset-2">
+            <div class="row">
+                <div class="col-xs-8 col-xs-offset-2">
+                    <form action="search" method="GET" id="searchForm">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Looking for..." name="q">
+                            <input type="hidden" name="numResultsToSkip" value="${DEFAULT_SKIP}">
+                            <input type="hidden" name="numResultsToReturn" value="${DEFAULT_RETURN}">
+                            <span class="input-group-btn">
+                                <button class="btn btn-success" type="button">Search!</button>
+                            </span>
+                        </div><!-- /input-group -->
+                    </form>
+                </div><!-- /.col-xs-8 -->
+            </div><!-- /.row -->
+            <hr>
+            <div class="search-results-wrapper col-xs-12">
+                <c:choose>
+                    <c:when test="${not empty search_result}">
+                        <c:forEach var="result" items="${search_result}" begin="0" end="${numResultsToReturn-1}">
+                            <c:url value="item" var="itemURL">
+                                <c:param name="id" value="${result.itemId}" />
+                            </c:url>
+                            <span class="col-xs-10"><p>${result.name}</p></span>
+                            <a href="${itemURL}">${result.itemId}</a>
+                            <hr>
+                        </c:forEach>
+                        <div class="btn-group col-xs-offset-5" role="group" aria-label="...">
+                            <c:if test="${show_prev}">
+                                <a class="btn btn-lg btn-primary" href="${prevURL}">Prev</a>
+                            </c:if>
+                            <c:if test="${show_next}">
+                                <a class="btn btn-lg btn-primary" href="${nextURL}">Next</a>
+                            </c:if>
+                            <hr>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <h3>No Results Found...</h3>
+                    </c:otherwise>
+                </c:choose>
+            </div><!-- /.search-results-wrapper -->
+        </div><!-- /.content-wrapper -->
     </body>
 </html>
