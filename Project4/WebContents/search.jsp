@@ -50,7 +50,7 @@
                             <input type="hidden" name="numResultsToSkip" value="${DEFAULT_SKIP}">
                             <input type="hidden" name="numResultsToReturn" value="${DEFAULT_RETURN}">
                             <span class="input-group-btn">
-                                <button class="btn btn-success" type="button">Search!</button>
+                                <button class="btn btn-success" type="submit">Search!</button>
                             </span>
                         </div><!-- /input-group -->
                     </form>

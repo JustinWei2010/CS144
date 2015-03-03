@@ -207,43 +207,14 @@ function requestSuggestions(q, callback) {
          for (var i=0; i < resultList.length; i++) {
             result.push(resultList[i].attributes[0].nodeValue);
          }
-         console.log(result);
          callback(result);
-         
-         /*
-         xmldom = (new DOMParser()).parseFromString(xmlDoc, 'text/xml');
-         text = xmldom.getElementsByTagName("citizenship")[0];
-         document.getElementById("Citizenship").innerHTML = text.childNodes[0].nodeValue;
-         */
+
       }
    
    }
    xmlHttp.send(null);
-   
-   //callback(result);
 }     
-        
-
-// send Google suggest request based on the user input
-function sendAjaxRequest(input) {
-   var request = "eBay/suggest?q="+encodeURI(input);
-   
-   xmlHttp.open("GET", request);
-   xmlHttp.onreadystatechange = showSuggestion;
-   xmlHttp.send(null);
-}
-
-// update Web page with the response from Google suggest
-function showSuggestion() {
-   if (xmlHttp.readyState == 4) {
-      response = xmlHttp.responseText;
-      response = response.replace(/</g, "&lt;");
-      response = response.replace(/>/g, "&gt;");
-      console.log(response);
-      //document.getElementById("suggestion").innerHTML = response;
-   }
-}
-
+      
 
 // initial load
 window.onload = function () {
