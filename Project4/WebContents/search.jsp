@@ -42,7 +42,7 @@ div.suggestions div.current {
     <body>
         <form action="search" method="GET" id="searchForm">
             Search:
-            <input type="text" name="q" id='searchTextBox' >
+            <input type="text" autocomplete="off" name="q" id='searchTextBox' >
             <input type="hidden" name="numResultsToSkip" value="${DEFAULT_SKIP}">
             <input type="hidden" name="numResultsToReturn" value="${DEFAULT_RETURN}">
             <input type="submit" value="Submit">
