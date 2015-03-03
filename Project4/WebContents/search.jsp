@@ -15,11 +15,34 @@
 <html>
     <head>
         <title>Search Results</title>
+        <script type="text/javascript" src="AutoSuggestControl.js"></script>
+        <style>
+div.suggestions {
+   -moz-box-sizing: border-box;
+   box-sizing: border-box;
+   border: 1px solid black;
+   position: absolute;   
+   background-color: white;
+}
+
+div.suggestions div {
+   cursor: default;
+   padding: 0px 3px;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+}
+
+div.suggestions div.current {
+   background-color: #3366cc;
+   color: white;
+}
+       </style>
     </head>
     <body>
         <form action="search" method="GET" id="searchForm">
             Search:
-            <input type="text" name="q">
+            <input type="text" name="q" id='searchTextBox' >
             <input type="hidden" name="numResultsToSkip" value="${DEFAULT_SKIP}">
             <input type="hidden" name="numResultsToReturn" value="${DEFAULT_RETURN}">
             <input type="submit" value="Submit">
