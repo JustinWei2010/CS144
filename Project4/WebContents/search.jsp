@@ -14,8 +14,12 @@
 
 <html>
     <head>
-        <jsp:include page="header.html"/>
         <title>Search Results</title>
+        <link href="bootstrap.min.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script src="bootstrap.min.js"></script>
+    
+        
         <script type="text/javascript" src="AutoSuggestControl.js"></script>
         <style>
             div.suggestions {
@@ -41,6 +45,7 @@
         </style>
     </head>
     <body>
+        <jsp:include page="header.html"/>
         <div class="content-wrapper col-xs-8 col-xs-offset-2">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2">
