@@ -16,6 +16,29 @@
     <head>
         <jsp:include page="header.html"/>
         <title>Search Results</title>
+        <script type="text/javascript" src="AutoSuggestControl.js"></script>
+        <style>
+            div.suggestions {
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+                border: 1px solid black;
+                position: absolute;   
+                background-color: white;
+            }
+
+            div.suggestions div {
+                cursor: default;
+                padding: 0px 3px;
+                white-space: nowrap;
+   		overflow: hidden;
+                text-overflow: ellipsis;
+	    }
+
+	    div.suggestions div.current {
+                background-color: #3366cc;
+           	color: white;
+	    }
+        </style>
     </head>
     <body>
         <div class="content-wrapper col-xs-8 col-xs-offset-2">
@@ -23,7 +46,7 @@
                 <div class="col-xs-8 col-xs-offset-2">
                     <form action="search" method="GET" id="searchForm">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Looking for..." name="q">
+                            <input type="text" class="form-control" autocomplete="off" placeholder="Looking for..." name="q" id="searchTextBox">
                             <input type="hidden" name="numResultsToSkip" value="${DEFAULT_SKIP}">
                             <input type="hidden" name="numResultsToReturn" value="${DEFAULT_RETURN}">
                             <span class="input-group-btn">
