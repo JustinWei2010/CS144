@@ -39,7 +39,7 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <span class="col-xs-7">
-                                        <div id="map-canvas" style="width: 500px; height: 400px;"></div>
+                                        <div id="map-canvas" style="width: 100%; height: 400px;"></div>
                                     </span>
                                     <div class="col-xs-5">
                                         Seller: ${item.seller.name} <span class="badge">${item.seller.rating}</span>
