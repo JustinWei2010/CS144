@@ -39,4 +39,9 @@ public class ConfirmOrderServlet extends HttpServlet implements Servlet {
          request.getRequestDispatcher("/404.jsp").forward(request, response);
       }
    }
+   
+   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+   {
+      doGet(request, response);
+   }
 }

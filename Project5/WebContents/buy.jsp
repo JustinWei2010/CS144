@@ -29,7 +29,7 @@
                     <div class="panel panel-info">
                         <div class="panel-heading">Checkout Information</div>
                             <div class="panel-body">
-                                <form class="form-horizontal" id="pay-form" method="GET" action="${confirmURL}">
+                                <form class="form-horizontal" id="pay-form" method="POST" action="${confirmURL}">
                                     <div class="form-group">
                                         <label for="inputItemID" class="col-xs-2 control-label">ID</label>
                                         <div class="col-xs-10">

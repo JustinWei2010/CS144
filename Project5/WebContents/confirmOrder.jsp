@@ -14,7 +14,7 @@
     <body>
         <jsp:include page="headerBasic.html"/>
         <div class="content-wrapper col-xs-8 col-xs-offset-2">
-            <h1>Confirm Your Order: ${id}</h1>
+            <h1>Confirm Your Order</h1>
             <hr>
             <div class="row">
                 <div class="confirm-info-wrapper col-xs-8 col-xs-offset-2">
